@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
 import TaskForm from "./TaskForm";
+import { useNavigate } from "react-router-dom"; // If you use react-router for navigation
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [editing, setEditing] = useState(null);
   const [filterText, setFilterText] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
+
+  const navigate = useNavigate(); // For navigation after logout
 
   useEffect(() => {
     fetchTasks();
@@ -54,6 +57,15 @@ export default function TaskList() {
     setTasks(tasks.map((t) => (t._id === task._id ? res.data : t)));
   };
 
+  // Logout function
+  const handleLogout = () => {
+    // Clear auth token or any user session info here
+    localStorage.removeItem("authToken"); // example token key
+
+    // Redirect to login page or home
+    navigate("/login"); // assuming you have a login route
+  };
+
   const filteredTasks = tasks
     .filter((task) => task.title.toLowerCase().includes(filterText.toLowerCase()))
     .sort((a, b) =>
@@ -65,6 +77,11 @@ export default function TaskList() {
   return (
     <div className="container">
       <h2>📝 Task List</h2>
+
+      {/* Logout button */}
+      <button onClick={handleLogout} style={{ float: "right", marginBottom: "10px" }}>
+        Logout
+      </button>
 
       <input
         type="text"
@@ -90,9 +107,8 @@ export default function TaskList() {
             <strong>{task.title}</strong>{" "}
             {task.deadline && (
               <span style={{ color: "#888" }}>
-  Date: {task.deadline ? new Date(task.deadline).toLocaleDateString() : "No deadline set"}
-</span>
-
+                Date: {new Date(task.deadline).toLocaleDateString()}
+              </span>
             )}
             <button onClick={() => handleEdit(task)}>Edit</button>
             <button onClick={() => deleteTask(task._id)}>Remove</button>
