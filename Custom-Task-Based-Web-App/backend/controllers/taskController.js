@@ -2,6 +2,22 @@ const Task = require('../models/Task');
 
 exports.createTask = async (req, res) => {
   try {
+    const { title, deadline } = req.body;
+
+    const task = await Task.create({ 
+      title, 
+      deadline, 
+      userId: req.user 
+    });
+
+    res.json(task);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.createTask = async (req, res) => {
+  try {
     const task = await Task.create({ title: req.body.title, userId: req.user });
     res.json(task);
   } catch (err) {

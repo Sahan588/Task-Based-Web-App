@@ -9,6 +9,10 @@ const taskSchema = new mongoose.Schema({
     type: String,
     default: 'pending',
   },
+  deadline: {
+    type: Date, //  New field added to store the due date
+    required: false,
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

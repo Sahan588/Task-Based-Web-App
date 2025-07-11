@@ -6,7 +6,7 @@ export default function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [editing, setEditing] = useState(null);
   const [filterText, setFilterText] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc"); // or "desc"
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     fetchTasks();
@@ -21,14 +21,18 @@ export default function TaskList() {
     }
   };
 
-  const addOrUpdateTask = async (title) => {
-    if (editing) {
-      const res = await API.put(`/tasks/${editing._id}`, { title });
-      setTasks(tasks.map((t) => (t._id === editing._id ? res.data : t)));
-      setEditing(null);
-    } else {
-      const res = await API.post("/tasks", { title });
-      setTasks([...tasks, res.data]);
+  const addOrUpdateTask = async (taskData) => {
+    try {
+      if (editing) {
+        const res = await API.put(`/tasks/${editing._id}`, taskData);
+        setTasks(tasks.map((t) => (t._id === editing._id ? res.data : t)));
+        setEditing(null);
+      } else {
+        const res = await API.post("/tasks", taskData);
+        setTasks([...tasks, res.data]);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -41,7 +45,15 @@ export default function TaskList() {
     setEditing(task);
   };
 
-  //  Filter and Sort
+  const toggleStatus = async (task) => {
+    const updatedStatus = task.status === "completed" ? "pending" : "completed";
+    const res = await API.put(`/tasks/${task._id}`, {
+      ...task,
+      status: updatedStatus,
+    });
+    setTasks(tasks.map((t) => (t._id === task._id ? res.data : t)));
+  };
+
   const filteredTasks = tasks
     .filter((task) => task.title.toLowerCase().includes(filterText.toLowerCase()))
     .sort((a, b) =>
@@ -52,9 +64,8 @@ export default function TaskList() {
 
   return (
     <div className="container">
-      <h2>Task List</h2>
+      <h2>📝 Task List</h2>
 
-      {/* Filter Input */}
       <input
         type="text"
         placeholder="Filter tasks..."
@@ -62,20 +73,29 @@ export default function TaskList() {
         onChange={(e) => setFilterText(e.target.value)}
       />
 
-      {/*  Sort Button */}
       <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
         Sort: {sortOrder === "asc" ? "A → Z" : "Z → A"}
       </button>
 
       <TaskForm onSubmit={addOrUpdateTask} editingTask={editing} />
 
-      {/*  Render Filtered and Sorted Tasks */}
       <ul>
         {filteredTasks.map((task) => (
           <li key={task._id}>
-            {task.title}
-            <button onClick={() => handleEdit(task)}>✏️</button>
-            <button onClick={() => deleteTask(task._id)}>🗑️</button>
+            <input
+              type="checkbox"
+              checked={task.status === "completed"}
+              onChange={() => toggleStatus(task)}
+            />
+            <strong>{task.title}</strong>{" "}
+            {task.deadline && (
+              <span style={{ color: "#888" }}>
+  Date: {task.deadline ? new Date(task.deadline).toLocaleDateString() : "No deadline set"}
+</span>
+
+            )}
+            <button onClick={() => handleEdit(task)}>Edit</button>
+            <button onClick={() => deleteTask(task._id)}>Remove</button>
           </li>
         ))}
       </ul>
