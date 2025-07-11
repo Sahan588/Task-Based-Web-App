@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import API from "../api";
 import TaskForm from "./TaskForm";
-import { useNavigate } from "react-router-dom"; // If you use react-router for navigation
+import { useNavigate } from "react-router-dom";
+import "./TaskList.css"; // 👈 make sure you create this file
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [editing, setEditing] = useState(null);
   const [filterText, setFilterText] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
-
-  const navigate = useNavigate(); // For navigation after logout
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchTasks();
@@ -57,13 +57,9 @@ export default function TaskList() {
     setTasks(tasks.map((t) => (t._id === task._id ? res.data : t)));
   };
 
-  // Logout function
   const handleLogout = () => {
-    // Clear auth token or any user session info here
-    localStorage.removeItem("authToken"); // example token key
-
-    // Redirect to login page or home
-    navigate("/login"); // assuming you have a login route
+    localStorage.removeItem("authToken");
+    navigate("/login");
   };
 
   const filteredTasks = tasks
@@ -75,46 +71,51 @@ export default function TaskList() {
     );
 
   return (
-    <div className="container">
-      <h2>📝 Task List</h2>
+    <div className="task-container">
+      <div className="header">
+        <h2>📝 Task Manager</h2>
+        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      </div>
 
-      {/* Logout button */}
-      <button onClick={handleLogout} style={{ float: "right", marginBottom: "10px" }}>
-        Logout
-      </button>
-
-      <input
-        type="text"
-        placeholder="Filter tasks..."
-        value={filterText}
-        onChange={(e) => setFilterText(e.target.value)}
-      />
-
-      <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
-        Sort: {sortOrder === "asc" ? "A → Z" : "Z → A"}
-      </button>
+      <div className="controls">
+        <input
+          type="text"
+          placeholder="🔍 Filter tasks..."
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+        />
+        <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
+          Sort: {sortOrder === "asc" ? "A → Z" : "Z → A"}
+        </button>
+      </div>
 
       <TaskForm onSubmit={addOrUpdateTask} editingTask={editing} />
 
-      <ul>
+      <div className="task-list">
         {filteredTasks.map((task) => (
-          <li key={task._id}>
-            <input
-              type="checkbox"
-              checked={task.status === "completed"}
-              onChange={() => toggleStatus(task)}
-            />
-            <strong>{task.title}</strong>{" "}
+          <div key={task._id} className="task-card">
+            <div className="task-top">
+              <input
+                type="checkbox"
+                checked={task.status === "completed"}
+                onChange={() => toggleStatus(task)}
+              />
+              <h3 className={task.status === "completed" ? "completed" : ""}>
+                {task.title}
+              </h3>
+            </div>
             {task.deadline && (
-              <span style={{ color: "#888" }}>
-                Date: {new Date(task.deadline).toLocaleDateString()}
-              </span>
+              <p className="deadline">
+                📅 {new Date(task.deadline).toLocaleDateString()}
+              </p>
             )}
-            <button onClick={() => handleEdit(task)}>Edit</button>
-            <button onClick={() => deleteTask(task._id)}>Remove</button>
-          </li>
+            <div className="task-actions">
+              <button className="edit-btn" onClick={() => handleEdit(task)}>Edit</button>
+              <button className="delete-btn" onClick={() => deleteTask(task._id)}>Remove</button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
