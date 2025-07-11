@@ -7,6 +7,7 @@
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
+    
 }
 
 .header {
@@ -14,6 +15,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+     
 }
 
 .logout-btn {
@@ -40,7 +42,7 @@
 }
 
 .controls button {
-  background-color: #2196f3;
+  background-color: lch(53.14% 98.39 317.65);
   color: white;
   border: none;
   max-width: 100px;
@@ -82,12 +84,14 @@
 .deadline {
   font-size: 0.9em;
   color: #666;
+
   margin: 5px 0;
 }
 
 .task-actions {
   margin-top: 10px;
   display: flex;
+  justify-content: space-between;
   gap: 10px;
 }
 
