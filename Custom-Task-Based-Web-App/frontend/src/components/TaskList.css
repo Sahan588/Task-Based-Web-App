@@ -20,6 +20,7 @@
   background-color: #f44336;
   color: white;
   border: none;
+  max-width: 80px;
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
@@ -42,6 +43,7 @@
   background-color: #2196f3;
   color: white;
   border: none;
+  max-width: 100px;
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
@@ -49,6 +51,7 @@
 
 .task-list {
   display: grid;
+  max-width: 800px;
   gap: 15px;
 }
 

@@ -80,7 +80,7 @@ export default function TaskList() {
       <div className="controls">
         <input
           type="text"
-          placeholder="🔍 Filter tasks..."
+          placeholder=" Filter tasks..."
           value={filterText}
           onChange={(e) => setFilterText(e.target.value)}
         />
