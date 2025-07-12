@@ -1,4 +1,4 @@
-"# Task-Based-Web-App" 
+
 # 📝 Task-Based Web App
 
 This is a simple and responsive **Full-Stack Task Management Web Application** built with **React**, **Node.js (Express)**, and **MongoDB**.
@@ -20,16 +20,16 @@ This is a simple and responsive **Full-Stack Task Management Web Application** b
 ## 📷 Screenshots
 
 ### 🔐 Login Page
-![Login](./screenshots/login.JPG)
+![Login](./login.JPg)
 
 ### 📝 Register Page
-![Register](./screenshots/register.JPG)
+![Register](./register.JPG)
 
 ### 📋 Task List
-![Task List](./screenshots/task%20list.JPG)
+![Task List](./task%20list.JPG)
 
 ### 🧩 Full Task Web App
-![Task App](./screenshots/task%20web%20app.JPG)
+![Task App](./task%20web%20app.JPG)
 
 ---
 
@@ -73,9 +73,11 @@ Task-Based-Web-App/
 └── README.md
 
 
-## 01. Go to the backend folder:
+# Project Setup Guide – Task-Based Web App
+# more formal version:
 
    ```bash
+## 01.Go to the backend folder:
    cd backend
 
 ## 02.Install dependencies:
